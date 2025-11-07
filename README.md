@@ -3,7 +3,7 @@
 API REST complète pour la gestion des commandes fournisseurs avec Spring Boot.
 
 
-## 🚀 Technologies
+##  Technologies
 
 - **Spring Boot 3.5.7**
 - **Spring Data JPA** - Persistence
@@ -14,7 +14,7 @@ API REST complète pour la gestion des commandes fournisseurs avec Spring Boot.
 - **Lombok** - Reduce boilerplate code
 - **Jakarta Validation** - Data validation
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 com.tricol/
@@ -28,7 +28,7 @@ com.tricol/
 └── service/         # Business Logic Layer
 ```
 
-## 📦 Installation
+##  Installation
 
 ### Prérequis
 - Java 17 ou supérieur
@@ -63,7 +63,7 @@ mvn spring-boot:run
 
 L'application démarrera sur `http://localhost:8081`
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Pagination par Défaut
 
@@ -72,9 +72,9 @@ app.pagination.default-page-size=10
 app.pagination.max-page-size=100
 ```
 
-## 📚 API Endpoints
+##  API Endpoints
 
-### 🏢 Fournisseurs
+###  Fournisseurs
 
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
@@ -85,7 +85,7 @@ app.pagination.max-page-size=100
 | GET | `/api/fournisseurs/search?query=` | Rechercher |
 | DELETE | `/api/fournisseurs/{id}` | Supprimer |
 
-### 📦 Produits
+###  Produits
 
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
@@ -98,7 +98,7 @@ app.pagination.max-page-size=100
 | GET | `/api/produits/stock-faible?seuil=10` | Stock faible |
 | DELETE | `/api/produits/{id}` | Supprimer |
 
-### 🛒 Commandes Fournisseurs
+###  Commandes Fournisseurs
 
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
@@ -114,7 +114,7 @@ app.pagination.max-page-size=100
 | GET | `/api/commandes/date-range` | Par période |
 | DELETE | `/api/commandes/{id}` | Supprimer |
 
-### 📊 Mouvements de Stock
+###  Mouvements de Stock
 
 | Méthode | Endpoint | Description |
 |---------|----------|-------------|
@@ -125,7 +125,7 @@ app.pagination.max-page-size=100
 | GET | `/api/mouvements-stock/commande/{id}` | Par commande |
 | GET | `/api/mouvements-stock/historique/produit/{id}` | Historique complet |
 
-## 🧪 Test de l'API
+##  Test de l'API
 
 ### Accéder à Swagger UI
 ```
@@ -198,7 +198,7 @@ curl -X PATCH http://localhost:8081/api/commandes/1/livrer
 curl http://localhost:8081/api/mouvements-stock/produit/1?page=0&size=10
 ```
 
-## ✨ Fonctionnalités Clés
+##  Fonctionnalités Clés
 
 ### 1. Gestion du Cycle de Vie des Commandes
 - **EN_ATTENTE** → **VALIDÉE** → **LIVRÉE**
@@ -239,7 +239,7 @@ Tous les endpoints de listing supportent:
 - Filtrage par catégorie, statut, date
 - Recherche insensible à la casse
 
-## 📊 Modèle de Données
+##  Modèle de Données
 
 ### Entités Principales
 
@@ -256,7 +256,7 @@ Tous les endpoints de listing supportent:
 - Produit 1-N Mouvements
 - Commande 1-N Mouvements
 
-## 🔍 Liquibase Migrations
+##  Liquibase Migrations
 
 Les scripts de migration sont dans `src/main/resources/db/changelog/changes/`:
 - `001-create-fournisseurs-table.xml`
@@ -266,7 +266,7 @@ Les scripts de migration sont dans `src/main/resources/db/changelog/changes/`:
 - `005-create-mouvements-stock-table.xml`
 - `006-create-commande-produit-table.xml`
 
-## 🛠️ Développement
+##  Développement
 
 ### Générer les Mappers MapStruct
 ```bash
@@ -284,24 +284,24 @@ Le profil `dev` charge des données de test au démarrage.
 spring.profiles.active=dev
 ```
 
-## 📝 Logs
+##  Logs
 
 Les logs sont configurés pour afficher:
 - Requêtes SQL (avec paramètres)
 - Actions métier importantes
 - Erreurs et exceptions
 
-## 🔐 Sécurité
+##  Sécurité
 
 Pour la production, pensez à ajouter:
 - Spring Security
 - JWT Authentication
 - Role-based access control
 - HTTPS
-
-
 - Documentation API: http://localhost:8081/swagger-ui.html
 
+## Planification des taches
+-Lien Jira : https://asmalachhab.atlassian.net/jira/software/projects/GDA/boards/509?sprintStarted=true
 ---
 
 **Développé pour Tricol** - Système de Gestion des Commandes Fournisseurs
