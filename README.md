@@ -2,14 +2,6 @@
 
 API REST complète pour la gestion des commandes fournisseurs avec Spring Boot.
 
-## 📋 Table des Matières
-- [Technologies](#technologies)
-- [Architecture](#architecture)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [API Endpoints](#api-endpoints)
-- [Test de l'API](#test-de-lapi)
-- [Fonctionnalités Clés](#fonctionnalités-clés)
 
 ## 🚀 Technologies
 
