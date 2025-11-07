@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <changeSet id="005-create-mouvements-stock-table" author="tricol">
+        <createTable tableName="mouvements_stock">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date_mouvement" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantite" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cout_unitaire" type="DECIMAL(10,2)"/>
+            <column name="produit_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="commande_fournisseur_id" type="BIGINT"/>
+            <column name="reference" type="VARCHAR(255)"/>
+            <column name="commentaire" type="TEXT"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="mouvements_stock"
+                baseColumnNames="produit_id"
+                constraintName="fk_mouvement_produit"
+                referencedTableName="produits"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="mouvements_stock"
+                baseColumnNames="commande_fournisseur_id"
+                constraintName="fk_mouvement_commande"
+                referencedTableName="commandes_fournisseurs"
+                referencedColumnNames="id"
+                onDelete="SET NULL"/>
+    </changeSet>
+
+</databaseChangeLog>

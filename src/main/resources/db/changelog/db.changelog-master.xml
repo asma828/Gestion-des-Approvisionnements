@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <include file="db/changelog/changes/001-create-fournisseurs-table.xml"/>
+    <include file="db/changelog/changes/002-create-produits-table.xml"/>
+    <include file="db/changelog/changes/003-create-commandes-fournisseurs-table.xml"/>
+    <include file="db/changelog/changes/004-create-lignes-commande-table.xml"/>
+    <include file="db/changelog/changes/005-create-mouvements-stock-table.xml"/>
+    <include file="db/changelog/changes/006-create-commande-produit-table.xml"/>
+
+</databaseChangeLog>
