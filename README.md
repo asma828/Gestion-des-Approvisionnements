@@ -39,18 +39,18 @@ com.tricol/
 
 1. **Cloner le projet**
 ```bash
-git clone <repository-url>
+git clone <https://github.com/asma828/Gestion-des-Approvisionnements.git>
 cd tricol-supplier-management
 ```
 
 2. **Créer la base de données MySQL**
 ```sql
-CREATE DATABASE tricol_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE approvisionnements CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 3. **Configurer application.properties**
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/tricol_db
+spring.datasource.url=jdbc:mysql://localhost:3306/approvisionnements
 spring.datasource.username=root
 spring.datasource.password=your_password
 ```
@@ -61,7 +61,7 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-L'application démarrera sur `http://localhost:8080`
+L'application démarrera sur `http://localhost:8081`
 
 ## ⚙️ Configuration
 
@@ -129,14 +129,14 @@ app.pagination.max-page-size=100
 
 ### Accéder à Swagger UI
 ```
-http://localhost:8080/swagger-ui.html
+http://localhost:8081/swagger-ui.html
 ```
 
 ### Exemples de Requêtes
 
 #### 1. Créer un Fournisseur
 ```bash
-curl -X POST http://localhost:8080/api/fournisseurs \
+curl -X POST http://localhost:8081/api/fournisseurs \
   -H "Content-Type: application/json" \
   -d '{
     "societe": "Textile Pro",
@@ -151,7 +151,7 @@ curl -X POST http://localhost:8080/api/fournisseurs \
 
 #### 2. Créer un Produit
 ```bash
-curl -X POST http://localhost:8080/api/produits \
+curl -X POST http://localhost:8081/api/produits \
   -H "Content-Type: application/json" \
   -d '{
     "nom": "Tissu Coton Blanc",
@@ -163,7 +163,7 @@ curl -X POST http://localhost:8080/api/produits \
 
 #### 3. Créer une Commande
 ```bash
-curl -X POST http://localhost:8080/api/commandes \
+curl -X POST http://localhost:8081/api/commandes \
   -H "Content-Type: application/json" \
   -d '{
     "dateCommande": "2024-11-02",
@@ -185,17 +185,17 @@ curl -X POST http://localhost:8080/api/commandes \
 
 #### 4. Valider une Commande
 ```bash
-curl -X PATCH http://localhost:8080/api/commandes/1/valider
+curl -X PATCH http://localhost:8081/api/commandes/1/valider
 ```
 
 #### 5. Livrer une Commande (Met à jour le stock)
 ```bash
-curl -X PATCH http://localhost:8080/api/commandes/1/livrer
+curl -X PATCH http://localhost:8081/api/commandes/1/livrer
 ```
 
 #### 6. Consulter les Mouvements de Stock
 ```bash
-curl http://localhost:8080/api/mouvements-stock/produit/1?page=0&size=10
+curl http://localhost:8081/api/mouvements-stock/produit/1?page=0&size=10
 ```
 
 ## ✨ Fonctionnalités Clés
@@ -299,11 +299,8 @@ Pour la production, pensez à ajouter:
 - Role-based access control
 - HTTPS
 
-## 📞 Support
 
-Pour toute question ou problème:
-- Email: support@tricol.ma
-- Documentation API: http://localhost:8080/swagger-ui.html
+- Documentation API: http://localhost:8081/swagger-ui.html
 
 ---
 
