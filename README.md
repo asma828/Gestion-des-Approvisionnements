@@ -301,7 +301,9 @@ Pour la production, pensez à ajouter:
 - Documentation API: http://localhost:8081/swagger-ui.html
 
 ## Planification des taches
--Lien Jira : https://asmalachhab.atlassian.net/jira/software/projects/GDA/boards/509?sprintStarted=true
+
+- Lien Jira : https://asmalachhab.atlassian.net/jira/software/projects/GDA/boards/509?sprintStarted=true
+
 ---
 
 **Développé pour Tricol** - Système de Gestion des Commandes Fournisseurs
