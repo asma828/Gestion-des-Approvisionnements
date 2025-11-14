@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,21 +55,25 @@ public class ProduitService {
     public ProduitDTO update(Long id, ProduitDTO dto) {
         log.info("Updating produit with ID: {}", id);
 
-        //  Load the existing product
         Produit produit = produitRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produit non trouvé avec l'ID: " + id));
 
-        //  Keep old stock and CUMP
         Integer stockActuel = produit.getStockActuel();
+
         BigDecimal coutActuel = produit.getCoutMoyenPondere() != null ? produit.getCoutMoyenPondere() : BigDecimal.ZERO;
 
-        // Update basic fields (name, description, category, price)
         produit.setNom(dto.getNom());
         produit.setDescription(dto.getDescription());
         produit.setCategorie(dto.getCategorie());
 
-        //  Recalculate CUMP if prixUnitaire changed
-        if (dto.getPrixUnitaire() != null && dto.getPrixUnitaire().compareTo(produit.getPrixUnitaire()) != 0) {
+        //  Update stock (missing before!)
+        if (dto.getStockActuel() != null) {
+            produit.setStockActuel(dto.getStockActuel());
+            stockActuel = dto.getStockActuel();
+        }
+
+        // Recalculate CUMP if prixUnitaire changed
+        if (dto.getPrixUnitaire() != null && dto.getPrixUnitaire().compareTo(produit.getPrixUnitaire()) != 0 && dto.getStockActuel()!=null && dto.getStockActuel().compareTo(produit.getStockActuel())!=0) {
             BigDecimal totalCoutActuel = coutActuel.multiply(BigDecimal.valueOf(stockActuel));
             BigDecimal totalNouveauCout = dto.getPrixUnitaire().multiply(BigDecimal.valueOf(stockActuel));
             BigDecimal nouveauCoutMoyen = totalCoutActuel.add(totalNouveauCout)
@@ -77,16 +82,13 @@ public class ProduitService {
             produit.setCoutMoyenPondere(nouveauCoutMoyen);
         }
 
-        //  Update prixUnitaire in produit
         produit.setPrixUnitaire(dto.getPrixUnitaire());
 
-        //  Save the product
         produit = produitRepository.save(produit);
-
-        log.info("Produit updated with ID: {}. Stock: {}, CUMP: {}", produit.getId(), stockActuel, produit.getCoutMoyenPondere());
 
         return produitMapper.toDTO(produit);
     }
+
 
 
     @Transactional(readOnly = true)
