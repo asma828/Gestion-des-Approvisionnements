@@ -52,17 +52,8 @@ public class StockService {
 
         mouvementRepository.save(mouvement);
 
-        // Mettre à jour le stock actuel
-        produit.setStockActuel(stockAvant + quantite);
 
-        // Calculer et mettre à jour le CUMP
-        BigDecimal nouveauCUMP = calculerCUMP(stockAvant, cumpAvant, quantite, coutUnitaire);
-        produit.setCoutMoyenPondere(nouveauCUMP);
-
-        produitRepository.save(produit);
-
-        log.info("Stock entry movement created. Stock: {} -> {}, CUMP: {} -> {}",
-                stockAvant, produit.getStockActuel(), cumpAvant, nouveauCUMP);
+        log.info("Stock entry movement created for product ID: {} (no changes to product stock)", produitId);
     }
 
     /**

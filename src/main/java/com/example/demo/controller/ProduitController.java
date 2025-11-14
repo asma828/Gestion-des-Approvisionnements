@@ -75,25 +75,7 @@ public class ProduitController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/categorie/{categorie}")
-    @Operation(summary = "Obtenir les produits par catégorie")
-    public ResponseEntity<PageResponse<ProduitDTO>> getByCategorie(
-            @PathVariable String categorie,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        PageResponse<ProduitDTO> response = produitService.getByCategorie(categorie, pageable);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/stock-faible")
-    @Operation(summary = "Obtenir les produits avec stock faible")
-    public ResponseEntity<List<ProduitDTO>> getProduitsStockFaible(
-            @RequestParam(defaultValue = "10") Integer seuil) {
-        List<ProduitDTO> produits = produitService.getProduitsStockFaible(seuil);
-        return ResponseEntity.ok(produits);
-    }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer un produit")

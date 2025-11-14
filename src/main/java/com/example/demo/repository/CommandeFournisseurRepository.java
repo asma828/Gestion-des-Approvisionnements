@@ -15,27 +15,6 @@ import java.util.List;
 @Repository
 public interface CommandeFournisseurRepository extends JpaRepository<CommandeFournisseur, Long> {
 
-    Page<CommandeFournisseur> findByFournisseurId(Long fournisseurId, Pageable pageable);
-
-    Page<CommandeFournisseur> findByStatut(StatutCommande statut, Pageable pageable);
-
-    @Query("SELECT c FROM CommandeFournisseur c WHERE c.dateCommande BETWEEN :startDate AND :endDate")
-    Page<CommandeFournisseur> findByDateCommandeBetween(
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate,
-            Pageable pageable
-    );
-
-    @Query("SELECT c FROM CommandeFournisseur c WHERE " +
-            "c.fournisseur.id = :fournisseurId AND c.statut = :statut")
-    List<CommandeFournisseur> findByFournisseurIdAndStatut(
-            @Param("fournisseurId") Long fournisseurId,
-            @Param("statut") StatutCommande statut
-    );
-
-    @Query("SELECT c FROM CommandeFournisseur c JOIN FETCH c.fournisseur WHERE c.id = :id")
-    CommandeFournisseur findByIdWithFournisseur(@Param("id") Long id);
-
     @Query("SELECT c FROM CommandeFournisseur c " +
             "LEFT JOIN FETCH c.lignesCommande lc " +
             "LEFT JOIN FETCH lc.produit " +

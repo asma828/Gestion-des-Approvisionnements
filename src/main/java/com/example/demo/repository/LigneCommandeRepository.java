@@ -10,10 +10,4 @@ import java.util.List;
 @Repository
 public interface LigneCommandeRepository extends JpaRepository<LigneCommande, Long> {
 
-    List<LigneCommande> findByCommandeId(Long commandeId);
-
-    List<LigneCommande> findByProduitId(Long produitId);
-
-    @Query("SELECT lc FROM LigneCommande lc WHERE lc.commande.id = :commandeId")
-    List<LigneCommande> findLignesByCommandeId(@Param("commandeId") Long commandeId);
 }

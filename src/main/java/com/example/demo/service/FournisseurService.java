@@ -4,6 +4,7 @@ import com.example.demo.dto.FournisseurDTO;
 import com.example.demo.dto.PageResponse;
 import com.example.demo.entity.Fournisseur;
 import com.example.demo.mapper.FournisseurMapper;
+import com.example.demo.repository.CommandeFournisseurRepository;
 import com.example.demo.repository.FournisseurRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +23,7 @@ public class FournisseurService {
 
     private final FournisseurRepository fournisseurRepository;
     private final FournisseurMapper fournisseurMapper;
+    private final CommandeFournisseurRepository commandeFournisseurRepository;
 
     public FournisseurDTO create(FournisseurDTO dto) {
         log.info("Creating new fournisseur: {}", dto.getSociete());

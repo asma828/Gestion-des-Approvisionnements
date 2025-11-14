@@ -67,6 +67,17 @@ public class CommandeFournisseurService {
         commande.setMontantTotal(montantTotal);
         commande = commandeRepository.save(commande);
 
+        // Créer les mouvements d'ENTREE dès la création de la commande
+        for (LigneCommande ligne : commande.getLignesCommande()) {
+            stockService.creerMouvementEntree(
+                    ligne.getProduit().getId(),
+                    ligne.getQuantite(),
+                    ligne.getPrixUnitaire(),
+                    commande.getId(),
+                    "Commande créée #" + commande.getId()
+            );
+        }
+
         log.info("Commande created with ID: {} and total amount: {}", commande.getId(), montantTotal);
         return commandeMapper.toDTO(commande);
     }
@@ -126,11 +137,10 @@ public class CommandeFournisseurService {
 
         // Create stock movements for each product
         for (LigneCommande ligne : commande.getLignesCommande()) {
-            stockService.creerMouvementEntree(
+            stockService.creerMouvementSortie(
                     ligne.getProduit().getId(),
                     ligne.getQuantite(),
-                    ligne.getPrixUnitaire(),
-                    commande.getId(),
+                    "CMD-" + commande.getId(),
                     "Livraison commande #" + commande.getId()
             );
         }
@@ -172,30 +182,6 @@ public class CommandeFournisseurService {
         log.info("Fetching all commandes with pagination");
 
         Page<CommandeFournisseur> page = commandeRepository.findAll(pageable);
-        return buildPageResponse(page);
-    }
-
-    @Transactional(readOnly = true)
-    public PageResponse<CommandeFournisseurDTO> getByFournisseur(Long fournisseurId, Pageable pageable) {
-        log.info("Fetching commandes for fournisseur ID: {}", fournisseurId);
-
-        Page<CommandeFournisseur> page = commandeRepository.findByFournisseurId(fournisseurId, pageable);
-        return buildPageResponse(page);
-    }
-
-    @Transactional(readOnly = true)
-    public PageResponse<CommandeFournisseurDTO> getByStatut(StatutCommande statut, Pageable pageable) {
-        log.info("Fetching commandes by statut: {}", statut);
-
-        Page<CommandeFournisseur> page = commandeRepository.findByStatut(statut, pageable);
-        return buildPageResponse(page);
-    }
-
-    @Transactional(readOnly = true)
-    public PageResponse<CommandeFournisseurDTO> getByDateRange(LocalDate startDate, LocalDate endDate, Pageable pageable) {
-        log.info("Fetching commandes between {} and {}", startDate, endDate);
-
-        Page<CommandeFournisseur> page = commandeRepository.findByDateCommandeBetween(startDate, endDate, pageable);
         return buildPageResponse(page);
     }
 

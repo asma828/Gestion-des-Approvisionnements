@@ -21,16 +21,6 @@ public interface MouvementStockRepository extends JpaRepository<MouvementStock, 
 
     Page<MouvementStock> findByCommandeFournisseurId(Long commandeId, Pageable pageable);
 
-    @Query("SELECT m FROM MouvementStock m WHERE " +
-            "m.produit.id = :produitId AND " +
-            "m.dateMouvement BETWEEN :startDate AND :endDate " +
-            "ORDER BY m.dateMouvement DESC")
-    List<MouvementStock> findByProduitIdAndDateBetween(
-            @Param("produitId") Long produitId,
-            @Param("startDate") LocalDateTime startDate,
-            @Param("endDate") LocalDateTime endDate
-    );
-
     @Query("SELECT m FROM MouvementStock m WHERE m.produit.id = :produitId ORDER BY m.dateMouvement DESC")
     Page<MouvementStock> findHistoriqueByProduit(@Param("produitId") Long produitId, Pageable pageable);
 }

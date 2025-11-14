@@ -13,10 +13,6 @@ import java.util.Optional;
 @Repository
 public interface FournisseurRepository extends JpaRepository<Fournisseur, Long> {
 
-    Optional<Fournisseur> findByEmail(String email);
-
-    Optional<Fournisseur> findByIce(String ice);
-
     boolean existsByEmail(String email);
 
     boolean existsByIce(String ice);

@@ -87,43 +87,6 @@ public class CommandeFournisseurController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/fournisseur/{fournisseurId}")
-    @Operation(summary = "Obtenir les commandes d'un fournisseur")
-    public ResponseEntity<PageResponse<CommandeFournisseurDTO>> getByFournisseur(
-            @PathVariable Long fournisseurId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by("dateCommande").descending());
-        PageResponse<CommandeFournisseurDTO> response = commandeService.getByFournisseur(fournisseurId, pageable);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/statut/{statut}")
-    @Operation(summary = "Obtenir les commandes par statut")
-    public ResponseEntity<PageResponse<CommandeFournisseurDTO>> getByStatut(
-            @PathVariable StatutCommande statut,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by("dateCommande").descending());
-        PageResponse<CommandeFournisseurDTO> response = commandeService.getByStatut(statut, pageable);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/date-range")
-    @Operation(summary = "Obtenir les commandes dans une période")
-    public ResponseEntity<PageResponse<CommandeFournisseurDTO>> getByDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-
-        Pageable pageable = PageRequest.of(page, size, Sort.by("dateCommande").descending());
-        PageResponse<CommandeFournisseurDTO> response = commandeService.getByDateRange(startDate, endDate, pageable);
-        return ResponseEntity.ok(response);
-    }
-
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprimer une commande")
     public ResponseEntity<Void> delete(@PathVariable Long id) {

@@ -50,13 +50,6 @@ public class MouvementStockService {
         return buildPageResponse(page);
     }
 
-    public PageResponse<MouvementStockDTO> getHistoriqueByProduit(Long produitId, Pageable pageable) {
-        log.info("Fetching stock history for product ID: {}", produitId);
-
-        Page<MouvementStock> page = mouvementRepository.findHistoriqueByProduit(produitId, pageable);
-        return buildPageResponse(page);
-    }
-
     public MouvementStockDTO getById(Long id) {
         log.info("Fetching mouvement with ID: {}", id);
 
@@ -77,4 +70,5 @@ public class MouvementStockService {
                 .last(page.isLast())
                 .build();
     }
+
 }

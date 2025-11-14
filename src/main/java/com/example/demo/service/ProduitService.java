@@ -2,8 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.dto.PageResponse;
 import com.example.demo.dto.ProduitDTO;
+import com.example.demo.entity.Fournisseur;
 import com.example.demo.entity.Produit;
 import com.example.demo.mapper.ProduitMapper;
+import com.example.demo.repository.FournisseurRepository;
 import com.example.demo.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,27 +31,63 @@ public class ProduitService {
         log.info("Creating new produit: {}", dto.getNom());
 
         Produit produit = produitMapper.toEntity(dto);
+
+        // Set default stock if null
         if (produit.getStockActuel() == null) {
             produit.setStockActuel(0);
         }
 
+        // Automatically calculate CUMP if stock > 0
+        if (produit.getStockActuel() > 0 && produit.getPrixUnitaire() != null) {
+            produit.setCoutMoyenPondere(produit.getPrixUnitaire());
+        } else {
+            produit.setCoutMoyenPondere(BigDecimal.ZERO);
+        }
+
         produit = produitRepository.save(produit);
 
-        log.info("Produit created with ID: {}", produit.getId());
+        log.info("Produit created with ID: {}, CUMP: {}", produit.getId(), produit.getCoutMoyenPondere());
         return produitMapper.toDTO(produit);
     }
+
 
     public ProduitDTO update(Long id, ProduitDTO dto) {
         log.info("Updating produit with ID: {}", id);
 
+        //  Load the existing product
         Produit produit = produitRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produit non trouvé avec l'ID: " + id));
 
-        produitMapper.updateEntityFromDTO(dto, produit);
+        //  Keep old stock and CUMP
+        Integer stockActuel = produit.getStockActuel();
+        BigDecimal coutActuel = produit.getCoutMoyenPondere() != null ? produit.getCoutMoyenPondere() : BigDecimal.ZERO;
+
+        // Update basic fields (name, description, category, price)
+        produit.setNom(dto.getNom());
+        produit.setDescription(dto.getDescription());
+        produit.setCategorie(dto.getCategorie());
+
+        //  Recalculate CUMP if prixUnitaire changed
+        if (dto.getPrixUnitaire() != null && dto.getPrixUnitaire().compareTo(produit.getPrixUnitaire()) != 0) {
+            BigDecimal totalCoutActuel = coutActuel.multiply(BigDecimal.valueOf(stockActuel));
+            BigDecimal totalNouveauCout = dto.getPrixUnitaire().multiply(BigDecimal.valueOf(stockActuel));
+            BigDecimal nouveauCoutMoyen = totalCoutActuel.add(totalNouveauCout)
+                    .divide(BigDecimal.valueOf(stockActuel), 2, BigDecimal.ROUND_HALF_UP);
+
+            produit.setCoutMoyenPondere(nouveauCoutMoyen);
+        }
+
+        //  Update prixUnitaire in produit
+        produit.setPrixUnitaire(dto.getPrixUnitaire());
+
+        //  Save the product
         produit = produitRepository.save(produit);
+
+        log.info("Produit updated with ID: {}. Stock: {}, CUMP: {}", produit.getId(), stockActuel, produit.getCoutMoyenPondere());
 
         return produitMapper.toDTO(produit);
     }
+
 
     @Transactional(readOnly = true)
     public ProduitDTO getById(Long id) {
@@ -74,22 +113,6 @@ public class ProduitService {
 
         Page<Produit> page = produitRepository.searchProduits(search, pageable);
         return buildPageResponse(page);
-    }
-
-    @Transactional(readOnly = true)
-    public PageResponse<ProduitDTO> getByCategorie(String categorie, Pageable pageable) {
-        log.info("Fetching produits by categorie: {}", categorie);
-
-        Page<Produit> page = produitRepository.findByCategorie(categorie, pageable);
-        return buildPageResponse(page);
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProduitDTO> getProduitsStockFaible(Integer seuil) {
-        log.info("Fetching produits with stock below: {}", seuil);
-
-        List<Produit> produits = produitRepository.findProduitsStockFaible(seuil);
-        return produitMapper.toDTOList(produits);
     }
 
     public void delete(Long id) {
@@ -142,4 +165,6 @@ public class ProduitService {
                 .last(page.isLast())
                 .build();
     }
+
+
 }

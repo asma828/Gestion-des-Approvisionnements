@@ -94,8 +94,6 @@ app.pagination.max-page-size=100
 | GET | `/api/produits/{id}` | Obtenir un produit |
 | GET | `/api/produits` | Liste paginée |
 | GET | `/api/produits/search?query=` | Rechercher |
-| GET | `/api/produits/categorie/{categorie}` | Par catégorie |
-| GET | `/api/produits/stock-faible?seuil=10` | Stock faible |
 | DELETE | `/api/produits/{id}` | Supprimer |
 
 ###  Commandes Fournisseurs
@@ -111,7 +109,6 @@ app.pagination.max-page-size=100
 | GET | `/api/commandes` | Liste paginée |
 | GET | `/api/commandes/fournisseur/{id}` | Par fournisseur |
 | GET | `/api/commandes/statut/{statut}` | Par statut |
-| GET | `/api/commandes/date-range` | Par période |
 | DELETE | `/api/commandes/{id}` | Supprimer |
 
 ###  Mouvements de Stock
@@ -123,8 +120,6 @@ app.pagination.max-page-size=100
 | GET | `/api/mouvements-stock/produit/{id}` | Par produit |
 | GET | `/api/mouvements-stock/type/{type}` | Par type |
 | GET | `/api/mouvements-stock/commande/{id}` | Par commande |
-| GET | `/api/mouvements-stock/historique/produit/{id}` | Historique complet |
-
 ##  Test de l'API
 
 ### Accéder à Swagger UI
@@ -132,71 +127,8 @@ app.pagination.max-page-size=100
 http://localhost:8081/swagger-ui.html
 ```
 
-### Exemples de Requêtes
 
-#### 1. Créer un Fournisseur
-```bash
-curl -X POST http://localhost:8081/api/fournisseurs \
-  -H "Content-Type: application/json" \
-  -d '{
-    "societe": "Textile Pro",
-    "adresse": "123 Rue Mohammed V",
-    "contact": "Ahmed Benali",
-    "email": "contact@textilepro.ma",
-    "telephone": "0522-123456",
-    "ville": "Casablanca",
-    "ice": "001234567890123"
-  }'
-```
 
-#### 2. Créer un Produit
-```bash
-curl -X POST http://localhost:8081/api/produits \
-  -H "Content-Type: application/json" \
-  -d '{
-    "nom": "Tissu Coton Blanc",
-    "description": "Tissu 100% coton",
-    "prixUnitaire": 45.50,
-    "categorie": "Tissu"
-  }'
-```
-
-#### 3. Créer une Commande
-```bash
-curl -X POST http://localhost:8081/api/commandes \
-  -H "Content-Type: application/json" \
-  -d '{
-    "dateCommande": "2024-11-02",
-    "fournisseurId": 1,
-    "lignesCommande": [
-      {
-        "produitId": 1,
-        "quantite": 50,
-        "prixUnitaire": 45.50
-      },
-      {
-        "produitId": 2,
-        "quantite": 100,
-        "prixUnitaire": 12.00
-      }
-    ]
-  }'
-```
-
-#### 4. Valider une Commande
-```bash
-curl -X PATCH http://localhost:8081/api/commandes/1/valider
-```
-
-#### 5. Livrer une Commande (Met à jour le stock)
-```bash
-curl -X PATCH http://localhost:8081/api/commandes/1/livrer
-```
-
-#### 6. Consulter les Mouvements de Stock
-```bash
-curl http://localhost:8081/api/mouvements-stock/produit/1?page=0&size=10
-```
 
 ##  Fonctionnalités Clés
 
@@ -212,9 +144,6 @@ curl http://localhost:8081/api/mouvements-stock/produit/1?page=0&size=10
 Nouveau CUMP = (Stock Ancien × CUMP Ancien + Quantité Entrée × Prix Entrée) 
                / (Stock Ancien + Quantité Entrée)
 ```
-
-#### FIFO (First In, First Out)
-Les premières entrées en stock sont considérées comme les premières sorties.
 
 ### 3. Mouvements de Stock Automatiques
 Lorsqu'une commande est livrée:
@@ -266,39 +195,6 @@ Les scripts de migration sont dans `src/main/resources/db/changelog/changes/`:
 - `005-create-mouvements-stock-table.xml`
 - `006-create-commande-produit-table.xml`
 
-##  Développement
-
-### Générer les Mappers MapStruct
-```bash
-mvn clean compile
-```
-
-### Exécuter les Tests
-```bash
-mvn test
-```
-
-### Profil de Développement
-Le profil `dev` charge des données de test au démarrage.
-```properties
-spring.profiles.active=dev
-```
-
-##  Logs
-
-Les logs sont configurés pour afficher:
-- Requêtes SQL (avec paramètres)
-- Actions métier importantes
-- Erreurs et exceptions
-
-##  Sécurité
-
-Pour la production, pensez à ajouter:
-- Spring Security
-- JWT Authentication
-- Role-based access control
-- HTTPS
-- Documentation API: http://localhost:8081/swagger-ui.html
 
 ## Planification des taches
 

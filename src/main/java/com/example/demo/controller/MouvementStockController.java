@@ -81,16 +81,6 @@ public class MouvementStockController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/historique/produit/{produitId}")
-    @Operation(summary = "Obtenir l'historique complet d'un produit")
-    public ResponseEntity<PageResponse<MouvementStockDTO>> getHistoriqueByProduit(
-            @PathVariable Long produitId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        PageResponse<MouvementStockDTO> response = mouvementService.getHistoriqueByProduit(produitId, pageable);
-        return ResponseEntity.ok(response);
-    }
 }
 
